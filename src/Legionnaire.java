@@ -52,7 +52,7 @@ public class Legionnaire extends Person
 	 *			if the faction is not one of "Blood Cloud", "Blue Foundation", "Generation 17" or "Mercenary";
 	 */
 	
-	public Legionnaire(String fN, String lN, String sex, byte age, String legionID, String CType, String fact) throws IllegalArgumentException
+	public Legionnaire(String fN, String lN, Gender sex, byte age, String legionID, String CType, String fact) throws IllegalArgumentException
 	{
 		super(fN, lN, sex, age);
 		legionnaireID = legionID;
@@ -105,7 +105,7 @@ public class Legionnaire extends Person
 	 *			if the faction is not one of "Blood Cloud", "Blue Foundation", "Generation 17" or "Mercenary";
 	 *			or if the rank is less than zero
 	 */
-	public Legionnaire(String fN, String lN, String mN, String title, String suffix, String sex, byte age, String legionID, String CType, String fact, double rankXP, double lvlXP) throws IllegalArgumentException
+	public Legionnaire(String fN, String lN, String mN, String title, String suffix, Gender sex, byte age, String legionID, String CType, String fact, double rankXP, double lvlXP) throws IllegalArgumentException
 	{
 		super(fN, lN, mN, title, suffix, sex, age);
 		legionnaireID = legionID;
@@ -227,7 +227,9 @@ public class Legionnaire extends Person
 	}
 	/**
 	 * A mutator method (setter) for updating the rank in experienced earned for this Legionnaire object
-	 *
+	 * Ranks: "Private", "Private 1st Class", "Specialist", "Sargent", "Staff Sargent", "Sargent 1st Class",
+	 * "Master Sargent", "1st Sargent", "Sargent Major", "Command Sargent Major",  "Sargent Major of the Army".
+	 * Rank Will Auto update as rankXP is changed.
 	 * @param	rankXP		The rank experience for the new Legionnaire object (valid values cannot be negative)
 	 * 
 	 * @throws	IllegalArgumentException Thrown if the passed in rank experience is less than zero

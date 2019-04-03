@@ -95,8 +95,7 @@ public class TemperatureConversionFX extends Application
 				//If the user entered in a non-numeric value, let the user know so that they can fix it
 				catch(NumberFormatException nfe)
 				{
-					//JOptionPane.showMessageDialog(null, "Please enter a numeric value");
-					new MessageBox("Please enter a numeric value", 200, 100);
+					JOptionPane.showMessageDialog(null, "Please enter a numeric value");
 				}
 			}
 		}

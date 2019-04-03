@@ -18,6 +18,8 @@ public class Employee extends Person
 	public Employee()
 	{
 		super();
+		//We need to change the Gender type to "male" since the no argument constructor sets it as "female"
+		this.setGender(Gender.male);
 		employeeNumber = 1000000;
 		jobTitle = "Trainee";
 		department = "Human Resources";
@@ -34,10 +36,16 @@ public class Employee extends Person
 	* @param 	empNum	The Employee Number of the new Employee object (valid Employee Numbers are 7 digit numbers beginning with a non-zero integer)
 	* @throws IllegalArgumentException Thrown if the passed in Employee Number is not a 7 digit number starting with a non-zero integer
 	*/
-	
-	public Employee(String fN, String lN, String sex, byte age, int empNum) throws IllegalArgumentException
+
+	public Employee(String fN, String lN, Gender sex, byte age, int empNum) throws IllegalArgumentException
 	{
 		super(fN, lN, sex, age);
+		//Since we are limiting the Gener type to "male" if any other Gender type was passed, we throw an Exception and do not create the object
+		//Note we do have to test this after calling the super constructor since that has to be first in the method (or the compiler will yell at you)
+		if (sex != Gender.male)
+		{
+			throw new IllegalArgumentException("Employee objects can only be \"male\"");
+		}
 		if (empNum < 1000000 || empNum > 9999999)
 		{
 			throw new IllegalArgumentException("All Employee Numbers must be 7 digit numbers beginning with a non-zero integer");
@@ -47,7 +55,7 @@ public class Employee extends Person
 			employeeNumber = empNum;
 		}
 	}
-	
+
 	/**
 	* A constructor with all of the properties set at construction time
 	*
@@ -61,16 +69,22 @@ public class Employee extends Person
 	* @param 	empNum	The Employee Number of the new Employee object (valid Employee Numbers are 7 digit numbers beginning with a non-zero integer)
 	* @param	jTitle	The job title of the new Employee object (valid values are "Trainee", "Analyst", "Programmer", "Manager", or "Director")
 	* @param	dept	The organizational department of the new Employee object (valid values are "Human Resources", "Coding", "Marketing", or "Sales")
-	* @param	wage	The annual salary in U.S. dollars for the new Employee object 
+	* @param	wage	The annual salary in U.S. dollars for the new Employee object
 	*
 	* @throws	IllegalArgumentException Thrown if the passed in employee number is not a 7 digit number beginning with a non-zero integer;
 	*			if the job title is not one of "Trainee", "Analyst", "Programmer", "Manage", or "Director";
 	*			if the department is not one of "Human Resources", "Coding", "Marketing", or "Sales";
 	*			or if the salary is less than zero
 	*/
-	public Employee(String fN, String lN, String mN, String title, String suffix, String sex, byte age, int empNum, String jTitle, String dept, int wage) throws IllegalArgumentException
+	public Employee(String fN, String lN, String mN, String title, String suffix, Gender sex, byte age, int empNum, String jTitle, String dept, int wage) throws IllegalArgumentException
 	{
 		super(fN, lN, mN, title, suffix, sex, age);
+		//Since we are limiting the Gener type to "male" if any other Gender type was passed, we throw an Exception and do not create the object
+		//Note we do have to test this after calling the super constructor since that has to be first in the method (or the compiler will yell at you)
+		if (sex != Gender.male)
+		{
+			throw new IllegalArgumentException("Employee objects can only be \"male\"");
+		}
 		if (empNum < 1000000 || empNum > 9999999)
 		{
 			throw new IllegalArgumentException("All Employee Numbers must be 7 digit numbers beginning with a non-zero integer");
@@ -102,6 +116,16 @@ public class Employee extends Person
 		else
 		{
 			throw new IllegalArgumentException("Employee object salaries cannot be negative");
+		}
+	}
+
+	//We override the setGender method inherited from the Person class in order to make sure that no one can change the Gender to something other than "male"
+	@Override
+	public void setGender(Gender sex)
+	{
+		if (sex != Gender.male)
+		{
+			throw new IllegalArgumentException("Employee objects can only be \"male\"");
 		}
 	}
 
@@ -122,7 +146,7 @@ public class Employee extends Person
 					employeeNumber = empNum;
 		}
 	}
-	
+
 	/**
 	* A mutator method (setter) for updating the Job Title for this Employee object
 	*
@@ -141,7 +165,7 @@ public class Employee extends Person
 			throw new IllegalArgumentException("All Employee Job Titles must be one of \"Trainee\", \"Analyst\", \"Programmer\", \"Manager\", or \"Director\"");
 		}
 	}
-	
+
 	/**
 	* A mutator method (setter) for updating the organizational Department for this Employee object
 	*
@@ -160,7 +184,7 @@ public class Employee extends Person
 			throw new IllegalArgumentException("All Employee Departments must be one of \"Human Resources\", \"Coding\", \"Marketing\", or \"Sales\"");
 		}
 	}
-	
+
 	/**
 	* A mutator method (setter) for updating the annual Salary in U.S. dollars for this Employee object
 	*
@@ -179,7 +203,7 @@ public class Employee extends Person
 			throw new IllegalArgumentException("Employee object salaries cannot be negative");
 		}
 	}
-	
+
 	/**
 	* An accessor method (getter) to retrieve this Employee object's Employee Number
 	*
@@ -189,7 +213,7 @@ public class Employee extends Person
 	{
 		return employeeNumber;
 	}
-	
+
 	/**
 	* An accessor method (getter) to retrieve this Employee object's Job Title
 	*
@@ -199,7 +223,7 @@ public class Employee extends Person
 	{
 		return jobTitle;
 	}
-	
+
 	/**
 	* An accessor method (getter) to retrieve this Employee object's Department
 	*
@@ -209,7 +233,7 @@ public class Employee extends Person
 	{
 		return department;
 	}
-	
+
 	/**
 	* An accessor method (getter) to retrieve this Employee object's Salary
 	*

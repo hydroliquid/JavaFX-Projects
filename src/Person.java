@@ -14,7 +14,7 @@ public class Person
 	private String middleName;
 	private String courtesyTitle;
 	private String suffix;
-	private String gender;
+	private Gender gender;
 	private byte age;
 
 	/**
@@ -27,7 +27,8 @@ public class Person
 		middleName = null;
 		courtesyTitle = null;
 		suffix = null;
-		gender = "female";
+		//With Enum types, we can reference any of the limited values as a public static constant of the class
+		gender = Gender.female;
 		age = 0;
 	}
 
@@ -37,23 +38,19 @@ public class Person
 	*
 	* @param fN		The first or given name of the new Person object
 	* @param lN		The last of family name of the new Person object
-	* @param sex	The gender or sex of the new Person object (valid values are "male", "female", and "unspecified")
+	* @param sex	The gender or sex of the new Person object
 	* @param age	The age in years of the new Person object (age must be a positive integer less than 128)
-	* @throws IllegalArgumentException		Thrown if the passed in gender is not "male", "female", or "unspecified";
-	*										or if the age is negative
+	* @throws IllegalArgumentException		Thrown if the passed in age is negative
 	*/
-	public Person(String fN, String lN, String sex, byte age)
+	public Person(String fN, String lN, Gender sex, byte age)
 	{
 		firstName = fN;
 		lastName = lN;
-		if (sex.equals("male") || sex.equals("female") || sex.equals("unspecified"))
-		{
-			gender = sex;
-		}
-		else
-		{
-			throw new IllegalArgumentException("All Person objects must be \"male\", \"female\", or \"unspecified\"");
-		}
+		//Since the Enum value is an integer constant, we can assign it directly.  integer constants pass by value, not by reference
+		//Since the Enum type only allows a specified set of values, no data protection is needed.  If the Enum variable is set, it
+		//  is valid.  An invalid Enum value will not compile.
+		gender = sex;
+
 		if (age < 0)
 		{
 			throw new IllegalArgumentException("All Person objects must be at least 0 years of age");
@@ -73,17 +70,21 @@ public class Person
 	* @param mN		The middle name of the new Person object
 	* @param title	The courtesy title of the new Person object (valid values are "Mr", "Mrs", "Ms", "Miss", or "Dr")
 	* @param suffix	The name suffix of the new Person object (valid values are "Jr", "II", "III", "IV", or "PhD")
-	* @param sex	The gender or sex of the new Person object (valid values are "male", "female", and "unspecified")
+	* @param sex	The gender or sex of the new Person object
 	* @param age	The age in years of the new Person object (age must be a positive integer less than 128)
 	* @throws IllegalArgumentException		Thrown if the passed in courtesty title is not one of "Mr", "Mrs", "Ms", "Miss", or "Dr";
-	* 	the passed in name suffix is not one of "Jr", "II", "III", "IV", or "PhD"; gender is not "male", "female", or "unspecified";
-	*										or if the age is negative
+	* 	the passed in name suffix is not one of "Jr", "II", "III", "IV", or "PhD"; or if the age is negative
 	*/
-	public Person(String fN, String lN, String mN, String title, String suffix, String sex, byte age)
+	public Person(String fN, String lN, String mN, String title, String suffix, Gender sex, byte age)
 	{
 		firstName = fN;
 		lastName = lN;
 		middleName = mN;
+		//Since the Enum value is an integer constant, we can assign it directly.  integer constants pass by value, not by reference
+		//Since the Enum type only allows a specified set of values, no data protection is needed.  If the Enum variable is set, it
+		//  is valid.  An invalid Enum value will not compile.
+		gender = sex;
+
 		if (title.equals("Mr") || title.equals( "Mrs") || title.equals("Ms") || title.equals("Miss") || title.equals("Dr"))
 		{
 			courtesyTitle = title;
@@ -99,14 +100,6 @@ public class Person
 		else
 		{
 			throw new IllegalArgumentException("Person objects can only have name suffixes of \"Jr\", \"II\", \"III\", \"IV\", or \"PhD\"");
-		}
-		if (sex.equals("male") || sex.equals("female") || sex.equals("unspecified"))
-		{
-			gender = sex;
-		}
-		else
-		{
-			throw new IllegalArgumentException("All Person objects must be \"male\", \"female\", or \"unspecified\"");
 		}
 		if (age < 0)
 		{
@@ -189,20 +182,14 @@ public class Person
 	/**
 	* A method to set the value of this Person object's gender
 	*
-	* @param sex	The gender or sex of the new Person object (valid values are "male", "female", and "unspecified")
-	*
-	* @throws IllegalArgumentException		Thrown if the passed in gender is not "male", "female", or "unspecified"
+	* @param sex	The gender or sex of the new Person object
 	*/
-	public void setGender(String sex)
+	public void setGender(Gender sex)
 	{
-		if (sex.equals("male") || sex.equals("female") || sex.equals("unspecified"))
-		{
-			gender = sex;
-		}
-		else
-		{
-			throw new IllegalArgumentException("All Person objects must be \"male\", \"female\", or \"unspecified\"");
-		}
+		//Since the Enum value is an integer constant, we can assign it directly.  integer constants pass by value, not by reference
+		//Since the Enum type only allows a specified set of values, no data protection is needed.  If the Enum variable is set, it
+		//  is valid.  An invalid Enum value will not compile.
+		gender = sex;
 	}
 
 	/**
@@ -280,7 +267,7 @@ public class Person
 	*
 	* @return gender	The gender of this Person object
 	*/
-	public String getGender()
+	public Gender getGender()
 	{
 		return gender;
 	}

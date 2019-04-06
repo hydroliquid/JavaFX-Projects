@@ -3,11 +3,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -38,9 +41,14 @@ public class HW2FXPerson extends Application
     private ComboBox<String> suffixDropDown = new ComboBox();
     private String[] suffixArray = {"Jr", "II", "III", "IV", "PhD"};
     // String sex
+    private Label genderLabel = new Label("Gender: ");
+    private ToggleGroup answer = new ToggleGroup();
     private RadioButton manButton = new RadioButton("Male: ");
     private RadioButton womanButton = new RadioButton("Female: ");
     private RadioButton unspecifiedButton = new RadioButton("I do not declare: ");
+
+
+
     // byte age
     private Label ageLabel = new Label("Age:");
     private TextField ageField = new TextField();
@@ -73,18 +81,22 @@ public class HW2FXPerson extends Application
 
     private FlowPane layout = new FlowPane();
 
+    private VBox mainLayout = new VBox();
+    private HBox radios = new HBox();
+
     private Scene scene;
 
     @Override
     public void start(Stage primaryStage)
     {
-        layout.setVgap(8);
-        layout.setHgap(4);
+
+        mainLayout.setSpacing(5);
+        mainLayout.setPadding(new Insets(15,15,15,15));
 
         BorderPane pane = new BorderPane();
 
         Label[] labelsArray = {titleLabel,firstNameLabel,middleNameLabel,lastNameLabel,suffixLabel,ageLabel,rankDisplayLabel,
-                                rankLabel,legionIDLabel,factionLabel,rankXPLabel,classLabel};
+                                rankLabel,legionIDLabel,factionLabel,rankXPLabel,classLabel,genderLabel};
         TextField[] textFieldsArray = {firstNameField,middleNameField,lastNameField,ageField,legionIDField};
 
         for(int i = 0; i < labelsArray.length; i++){
@@ -97,9 +109,7 @@ public class HW2FXPerson extends Application
             tempTextField = textFieldsArray[i];
             tempTextField.setPrefWidth(130);
         }
-
         // todo: Title section - Completed
-       // titleLabel.setPrefWidth(100);
 
         ComboBox[] dropDownsArray = {titleDropDown,suffixDropDown,classesDropDown,factionsDropDown};
         String[][] arraysArray = {titlesArray,suffixArray,classesArray,factionsArray};
@@ -117,7 +127,167 @@ public class HW2FXPerson extends Application
             ObservableList<String> tempList = FXCollections.observableArrayList(arraysArray[i]);
             tempComboBox.getItems().addAll(tempList);
         }
-/*
+
+        // todo: sex picker - work properly
+        radios.setPrefWidth(250);
+        radios.setSpacing(10);
+        radios.setPadding(new Insets(0,0,0,0));
+
+        // todo: Setup toggle group
+        manButton.setToggleGroup(answer);
+        womanButton.setToggleGroup(answer);
+        unspecifiedButton.setToggleGroup(answer);
+
+        manButton.setOnAction(new ButtonListener());
+        womanButton.setOnAction(new ButtonListener());
+        unspecifiedButton.setOnAction(new ButtonListener());
+
+        // todo: ComboBox rank section
+        rankXPLabel.setPrefWidth(100);
+        BorderPane paneForRankXPComboBox = new BorderPane();
+        paneForRankXPComboBox.setLeft(new Label("Rank Experience: "));
+        paneForRankXPComboBox.setLeft(rankXPDropDown);
+        pane.setTop(paneForRankXPComboBox);
+        rankXPDropDown.setPrefWidth(130);
+        rankXPDropDown.setValue(0.0);
+        ObservableList<Double> rankXPs = FXCollections.observableArrayList(rankXPsArray);
+        rankXPDropDown.getItems().addAll(rankXPs);
+        // todo: rank title auto Label
+        rankLabel.setPrefWidth(100);
+
+        SetRankStatus(rankXPDropDown.getValue());
+
+        legionnaire1.setRankTitle(rankXPDropDown.getValue());
+
+
+        // todo: create button load
+        submitButton.setPrefWidth(120);
+        submitButton.setAlignment(Pos.CENTER);
+
+        submitButton.setOnAction(new ButtonListener());
+
+
+        mainLayout.setCenterShape(true);
+        mainLayout.getChildren().addAll(titleLabel,titleDropDown, firstNameLabel, firstNameField, middleNameLabel,middleNameField,lastNameLabel,lastNameField, suffixLabel,
+                suffixDropDown,genderLabel, manButton, womanButton, unspecifiedButton,ageLabel, ageField, legionIDLabel, legionIDField, classLabel,
+                classesDropDown,factionLabel, factionsDropDown, rankXPLabel, rankXPDropDown, rankLabel, rankDisplayLabel, submitButton);
+
+        scene = new Scene(mainLayout, 450, 720);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Legionnaire Application");
+        primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+    // todo: Create Action Event
+    private class ButtonListener implements EventHandler<ActionEvent> {
+
+
+        @Override
+        public void handle(ActionEvent e) {
+            if (e.getSource() instanceof Button) {
+                try {
+
+                    legionnaire1.setCourtesyTitle(titleDropDown.getValue());
+                    legionnaire1.setFirstName(firstNameField.getText());
+                    legionnaire1.setMiddleName(middleNameField.getText());
+                    legionnaire1.setLastName(lastNameField.getText());
+                    legionnaire1.setSuffix(suffixDropDown.getValue());
+                    legionnaire1.setGender(checkGender());
+                    legionnaire1.setRankTitle(rankXPDropDown.getValue());
+                    legionnaire1.setRankXP(rankXPDropDown.getValue());
+                    legionnaire1.setRank(rankXPDropDown.getValue());
+                    ageHolder = Byte.parseByte(ageField.getText());
+                    legionnaire1.setAge(ageHolder);
+                    legionnaire1.setClassType(classesDropDown.getValue());
+                    legionnaire1.setFaction(factionsDropDown.getValue());
+                    legionnaire1.setMylegionID(legionIDField.getText());
+                    legionnaire1.setLegionTitle();
+
+                    JOptionPane.showMessageDialog(null, "Name: " + legionnaire1.getCourtesyTitle() + " "
+                            + legionnaire1.getFirstName() + " " + legionnaire1.getMiddleName() + " " + legionnaire1.getLastName()
+                            + " " + legionnaire1.getSuffix() + "\n"
+                            + "Age :   " + legionnaire1.getAge() + "\n"
+                            + "Gender: " + legionnaire1.getGender() + "\n"
+                            + legionnaire1.getRankTitle() + " with rank of: " + legionnaire1.getRank() + "\n"
+                            + legionnaire1.getClassType() + " " + legionnaire1.getLegionnaireID() + " of " + legionnaire1.getFaction() + "\n"
+                            + "Your application has been submitted." + "\n"
+                            + legionnaire1.getLegionTitle()
+                    );
+
+                }
+                catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(null, "Please enter a correct values");
+                }
+            }
+        }
+    }
+
+    public String SetRankStatus(Double rankXP)
+    {
+        String rank;
+        legionnaire1.setRankTitle(rankXP);
+        rank = legionnaire1.getRankTitle();
+
+        return rank;
+    }
+
+    public Gender checkGender(){
+
+        Gender tempGender;
+
+        if(manButton.isSelected())
+        {
+            tempGender = Gender.male;
+        }
+        else if(womanButton.isSelected())
+        {
+            tempGender = Gender.female;
+        }
+        else if(unspecifiedButton.isSelected())
+        {
+            tempGender = Gender.unspecified;
+        }
+        else
+        {
+            tempGender = null;
+        }
+        return tempGender;
+    }
+
+
+}
+
+/* redundant old code
+
+
+        if(manButton.isSelected())
+        {
+            manButton.setSelected(true);
+            womanButton.setSelected(false);
+            unspecifiedButton.setSelected(false);
+        }
+        else if(womanButton.isSelected())
+        {
+            manButton.setSelected(false);
+            womanButton.setSelected(true);
+            unspecifiedButton.setSelected(false);
+        }
+        else if(unspecifiedButton.isSelected())
+        {
+            manButton.setSelected(false);
+            womanButton.setSelected(false);
+            unspecifiedButton.setSelected(true);
+        }
+        else
+        {
+            manButton.setSelected(false);
+            womanButton.setSelected(false);
+            unspecifiedButton.setSelected(false);
+        }
+
+        // titleLabel.setPrefWidth(100);
+
         BorderPane paneForTitleComboBox = new BorderPane();
         paneForTitleComboBox.setLeft(new Label("Title: "));
         paneForTitleComboBox.setLeft(titleDropDown);
@@ -147,16 +317,8 @@ public class HW2FXPerson extends Application
         suffixDropDown.setValue(null);
         ObservableList<String> suffixes = FXCollections.observableArrayList(suffixArray);
         suffixDropDown.getItems().addAll(suffixes);
-*/
-        // titleLabel.setText(legionnaire1.getFirstName() + " " + legionnaire1.getLastName());
 
-        // todo: sex picker - work properly
-        ToggleGroup gender = new ToggleGroup();
-        // todo: Setup toggle group 
-        manButton.setOnAction(new ButtonListener());
-        womanButton.setOnAction(new ButtonListener());
-        unspecifiedButton.setOnAction(new ButtonListener());
-/*
+
         // todo: Age section - Completed
         ageLabel.setPrefWidth(100);
         ageField.setPrefWidth(100);
@@ -186,115 +348,13 @@ public class HW2FXPerson extends Application
         factionsDropDown.setValue("Mercenary");
         ObservableList<String> factions = FXCollections.observableArrayList(factionsArray);
         factionsDropDown.getItems().addAll(factions);
-*/
-        // todo: ComboBox rank section
-        rankXPLabel.setPrefWidth(100);
-        BorderPane paneForRankXPComboBox = new BorderPane();
-        paneForRankXPComboBox.setLeft(new Label("Rank Experience: "));
-        paneForRankXPComboBox.setLeft(rankXPDropDown);
-        pane.setTop(paneForRankXPComboBox);
-        rankXPDropDown.setPrefWidth(130);
-        rankXPDropDown.setValue(0.0);
-        ObservableList<Double> rankXPs = FXCollections.observableArrayList(rankXPsArray);
-        rankXPDropDown.getItems().addAll(rankXPs);
-        // todo: rank title auto Label
-        rankLabel.setPrefWidth(100);
 
-        SetRank(rankXPDropDown.getValue());
-
-        legionnaire1.setRankTitle(rankXPDropDown.getValue());
         //rankDisplayLabel.setPrefWidth(130);
 
-        // todo: create button load
-        submitButton.setPrefWidth(120);
-        submitButton.setAlignment(Pos.CENTER);
 
-        //submitButton.setOnAction(new ButtonListener(rankXPDropDown.getValue()));
-
-        layout.setCenterShape(true);
-        layout.getChildren().addAll(titleLabel,titleDropDown, firstNameLabel, firstNameField, middleNameLabel,middleNameField,lastNameLabel,lastNameField, suffixLabel,
-                suffixDropDown, manButton, womanButton, unspecifiedButton,ageLabel, ageField, legionIDLabel, legionIDField, classLabel,
-                classesDropDown,factionLabel, factionsDropDown, rankXPLabel, rankXPDropDown, rankLabel, rankDisplayLabel, submitButton);
-        scene = new Scene(layout, 250, 450);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Legionnaire Application");
-        primaryStage.show();
-    }
-
-    // todo: Create Action Event
-    private class ButtonListener implements EventHandler<ActionEvent> {
-
-
-        @Override
-        public void handle(ActionEvent e) {
-            if (e.getSource() instanceof Button) {
-                try {
-
-                    legionnaire1.setCourtesyTitle(titleDropDown.getValue());
-                    legionnaire1.setFirstName(firstNameField.getText());
-                    legionnaire1.setMiddleName(middleNameField.getText());
-                    legionnaire1.setLastName(lastNameField.getText());
-                    legionnaire1.setSuffix(suffixDropDown.getValue());
-                    legionnaire1.setGender(checkGender());
-
-
-                    //outputVolumeName = dropDown2.getValue();
+                            //outputVolumeName = dropDown2.getValue();
                     //inputMeasure = Double.parseDouble(convertNumber.getText());
                     //double answer = ConvertMeasure.Convert(inputMeasure, dropDown1, dropDown2);
                     //outputMeasure = answer;
 
-                    //JOptionPane.showMessageDialog(null, /outputMeasure + outputVolumeName);
-
-                }
-                //If the user entered in a non-numeric value, let the user know so that they can fix it
-                catch (NumberFormatException nfe) {
-                    JOptionPane.showMessageDialog(null, "Please enter a correct values");
-                    //new MessageBox("Please enter a  value", 200, 100);
-                }
-            }
-        }
-    }
-
-    public String SetRank(Double rankXP)
-    {
-        String rank;
-        legionnaire1.setRankTitle(rankXP);
-        rank = legionnaire1.getRankTitle();
-
-        return rank;
-    }
-
-    public Gender checkGender(){
-
-        Gender tempGender = Gender.male;
-
-        if(manButton.isSelected())
-        {
-            manButton.setSelected(true);
-            womanButton.setSelected(false);
-            unspecifiedButton.setSelected(false);
-        }
-        else if(womanButton.isSelected())
-        {
-            manButton.setSelected(false);
-            womanButton.setSelected(true);
-            unspecifiedButton.setSelected(false);
-        }
-        else if(unspecifiedButton.isSelected())
-        {
-            manButton.setSelected(false);
-            womanButton.setSelected(false);
-            unspecifiedButton.setSelected(true);
-        }
-        else
-        {
-            manButton.setSelected(false);
-            womanButton.setSelected(false);
-            unspecifiedButton.setSelected(false);
-        }
-
-        return tempGender;
-    }
-
-
-}
+ */

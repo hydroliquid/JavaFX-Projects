@@ -44,7 +44,7 @@ public class Legionnaire extends Person
 	 * @param 	age			The age in years of the new Legionnaire object (age must be a positive integer less than 128)
 	 * @param 	legionID	The Legionnaire Number of the new Legionnaire object (valid Legionnaire Numbers are 7 digit numbers beginning with a non-zero integer)
 	 * @param 	legionID	The Legionnaire Codename of the new Legionnaire object 
-	 * @param	CType		The Class Type of the new Legionnaire object (valid values are "Ranger", "Storm", "Executioner", "Angelic", or "Berserk")
+	 * @param	CType		The Class Type of the new Legionnaire object (valid values are "Trainee", "Ranger", "Storm", "Executioner", "Angelic", or "Berserk")
 	 * @param	fact		The Faction of the new Legionnaire object (valid values are "Blood Cloud", "Blue Foundation", "Generation 17" or "Mercenary")
 	 * 
 	 * @throws IllegalArgumentException 
@@ -93,15 +93,16 @@ public class Legionnaire extends Person
 	 * @param 	sex			The gender or sex of the new Legionnaire object
 	 * @param 	age			The age in years of the new Legionnaire object (age must be a positive integer less than 128)
 	 * @param 	legionID	The Legionnaire Codename of the new Legionnaire object 
-	 * @param	CType		The Class Type of the new Legionnaire object (valid values are "Ranger", "Storm", "Executioner", "Angelic", or "Berserk")
+	 * @param	CType		The Class Type of the new Legionnaire object (valid values are "Trainee", "Ranger", "Storm", "Executioner", "Angelic", or "Berserk")
 	 * @param	fact		The Faction of the new Legionnaire object (valid values are "Blood Cloud", "Blue Foundation", "Generation 17" or "Mercenary")
-	 * @param	rankXP		The rank experience of the new Legionnaire object(This will increase as missions(from factions) are completed)
-	 * @param	rTitle 		The rank title of the Legionnaire object(This is only allowed to be increased if the rank experience is increased)
-	 * @param	lvlXP		The level experience of the new Legionnaire object(This will increase as missions are completed or monsters are killed) 
-	 * @param	lTitle		The legion title of the Legionnaire object(This is autofilled using rTitle, fact and CType)	
+	 * @param	rankXP		The rank experience of the new Legionnaire object(This will increase as missions(from factions) are completed
+	 * @param	lvlXP		The level experience of the new Legionnaire object(This will increase as missions are completed or monsters are killed)
+	 *                     Not in constructor
+	 * 	// rankTitle 	The rank title of the Legionnaire object(This is only allowed to be increased if the rank experience is increased)
+	 * 	// legionTitle	The legion title of the Legionnaire object(This is autofilled using rTitle, fact and CType)
 	 *
 	 * @throws	IllegalArgumentException
-	 *			if the job title is not one of "Ranger", "Storm", "Executioner", "Angelic", or "Berserk";
+	 *			if the job title is not one of "Trainee", "Ranger", "Storm", "Executioner", "Angelic", or "Berserk";
 	 *			if the faction is not one of "Blood Cloud", "Blue Foundation", "Generation 17" or "Mercenary";
 	 *			or if the rank is less than zero
 	 */
@@ -109,14 +110,13 @@ public class Legionnaire extends Person
 	{
 		super(fN, lN, mN, title, suffix, sex, age);
 		legionnaireID = legionID;
-		String rTitle = "";
-		if (CType.equals("Ranger") || CType.equals("Storm") || CType.equals("Executioner") || CType.equals("Angelic") || CType.equals("Berserk"))
+		if (CType.equals("Trainee") || CType.equals("Ranger") || CType.equals("Storm") || CType.equals("Executioner") || CType.equals("Angelic") || CType.equals("Berserk"))
 		{
 			classType = CType;
 		}
 		else
 		{
-			throw new IllegalArgumentException("All Legionnaire Class Type must be one of \"Ranger\", \"Storm\", \"Executioner\", \"Angelic\", or \"Berserk\"");
+			throw new IllegalArgumentException("All Legionnaire Class Type must be one of \"Trainee\", \"Ranger\", \"Storm\", \"Executioner\", \"Angelic\", or \"Berserk\"");
 		}
 		if (fact.equals("Blood Cloud") || fact.equals("Blue Foundation") || fact.equals("Generation 17") || fact.equals("Mercenary"))
 		{
@@ -130,7 +130,7 @@ public class Legionnaire extends Person
 		{
 			rank = (int)rankXP;
 			setRankTitle(rankXP);
-			rTitle = getRankTitle();
+			rankTitle = getRankTitle();
 		}
 		else
 		{
@@ -145,7 +145,7 @@ public class Legionnaire extends Person
 			throw new IllegalArgumentException("Legionnaire object level experience cannot be negative");
 		}
 
-		legionTitle = fact + CType + rTitle;
+		legionTitle = fact + CType + rankTitle;
 	}
 
 	/*___________________________________________________________________________
@@ -170,19 +170,19 @@ public class Legionnaire extends Person
 	/**
 	 * A mutator method (setter) for updating the Class Type for this Legionnaire object
 	 *
-	 * @param	CType		The class type of the new Legionnaire object (valid values are "Ranger", "Storm", "Executioner", "Angelic", or "Berserk")
+	 * @param	CType		The class type of the new Legionnaire object (valid values are "Trainee", "Ranger", "Storm", "Executioner", "Angelic", or "Berserk")
 	 *
-	 * @throws	IllegalArgumentException Thrown if the passed in Legion Class Types must be one of "Ranger", "Storm", "Executioner", "Angelic", or "Berserk"
+	 * @throws	IllegalArgumentException Thrown if the passed in Legion Class Types must be one of "Trainee", "Ranger", "Storm", "Executioner", "Angelic", or "Berserk"
 	 */
 	public void setClassType(String CType)
 	{
-		if (CType.equals("Ranger") || CType.equals("Storm") || CType.equals("Executioner") || CType.equals("Angelic") || CType.equals("Berserk"))
+		if (CType.equals("Trainee") || CType.equals("Ranger") || CType.equals("Storm") || CType.equals("Executioner") || CType.equals("Angelic") || CType.equals("Berserk"))
 		{
 			classType = CType;
 		}
 		else
 		{
-			throw new IllegalArgumentException("All Legionnaire Class Types must be one of \"Ranger\", \"Storm\", \"Executioner\", \"Angelic\", or \"Berserk\"");
+			throw new IllegalArgumentException("All Legionnaire Class Types must be one of \"Trainee\", \"Ranger\", \"Storm\", \"Executioner\", \"Angelic\", or \"Berserk\"");
 		}
 	}
 	
@@ -214,13 +214,14 @@ public class Legionnaire extends Person
 	 */
 	public void setRank(double rankXP)
 	{
-		if (rankXP >= 0.0)
+		try
 		{
-			rank = (int)rankXP;
-			setRankTitle(rankXP);
-			rankTitle = getRankTitle();
+			if (rankXP >= 0.0)
+			{
+				rank = (int)rankXP;
+			}
 		}
-		else
+		catch(Exception e)
 		{
 			throw new IllegalArgumentException("Legionnaire object rank experience cannot be negative");
 		}
@@ -237,38 +238,63 @@ public class Legionnaire extends Person
 	public void setRankTitle(double rankXP)
 	{
 		int rankUp;
-		if (rankXP >= 0.0)
-		{
+		try {
+			if (rankXP >= 0.0)
+			{
 			for(rankUp = 0; rankUp < (int)rankXP; rankUp++)
 			{
-				if(rankXP >= 1)
+				if(rankXP >= 0.0)
 				{
 					rankUp++;
 				}
 			}
-			switch(rankUp)
-			{
-				case 0: rankTitle = "Private";
-				case 1: rankTitle = "Private";
-				case 2: rankTitle = "Private 1st Class";
-				case 3: rankTitle = "Specialist";
-				case 4: rankTitle = "Sargent";
-				case 5: rankTitle = "Staff Sargent";
-				case 6: rankTitle = "Sargent 1st Class";
-				case 7: rankTitle = "Master Sargent";
-				case 8: rankTitle = "1st Sargent";
-				case 9: rankTitle = "Sargent Major";
-				case 10: rankTitle = "Command Sargent Major";
-				case 11: rankTitle = "Sargent Major of the Army";
-				default:
-					rankTitle = "Private";
-					break;
+				switch (rankUp) {
+					case 0:
+						this.rankTitle = "Private";
+						break;
+					case 1:
+						this.rankTitle = "Private";
+						break;
+					case 2:
+						this.rankTitle = "Private 1st Class";
+						break;
+					case 3:
+						this.rankTitle = "Specialist";
+						break;
+					case 4:
+						this.rankTitle = "Sargent";
+						break;
+					case 5:
+						this.rankTitle = "Staff Sargent";
+						break;
+					case 6:
+						this.rankTitle = "Sargent 1st Class";
+						break;
+					case 7:
+						this.rankTitle = "Master Sargent";
+						break;
+					case 8:
+						this.rankTitle = "1st Sargent";
+						break;
+					case 9:
+						this.rankTitle = "Sargent Major";
+						break;
+					case 10:
+						this.rankTitle = "Command Sargent Major";
+						break;
+					case 11:
+						this.rankTitle = "Sargent Major of the Army";
+						break;
+					default:
+						this.rankTitle = "Private";
+						break;
+				}
+				rank = rankUp;
 			}
-			rank = rankUp;
 		}
-		else
+		catch(Exception e)
 		{
-			throw new IllegalArgumentException("Legionnaire object rank experience cannot be negative");
+			throw new IllegalArgumentException(e + " and Legionnaire object rank experience cannot be negative");
 		}
 
 	}
@@ -284,7 +310,6 @@ public class Legionnaire extends Person
 		if (rankXP >= 0.0)
 		{
 			rankExperience = rankXP;
-			setRankTitle(rankXP);
 		}
 		else
 		{
@@ -336,7 +361,7 @@ public class Legionnaire extends Person
 	 */
 	public void setLegionTitle()
 	{
-		legionTitle = getLegionTitle();
+		legionTitle = legionnaireID + " of " + faction + " " + classType + " " + rankTitle;
 	}
 
 	/*		   _ _ _ _ 
@@ -364,7 +389,7 @@ public class Legionnaire extends Person
 	 *
 	 * @return classType	The Class Type of this Legionnaire object
 	 */
-	public String getclassType()
+	public String getClassType()
 	{
 		return classType;
 	}
